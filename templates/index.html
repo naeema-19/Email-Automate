@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Priority Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function toggleBusy() {
+            fetch('/toggle-busy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("busy-status").textContent = data.busy ? "Busy" : "Available";
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+    
+    <style>
+        body { background-color: #e0e5ec; }
+        .neumorphic { 
+            background: #e0e5ec;
+            box-shadow: 8px 8px 16px #a3b1c6, -8px -8px 16px #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen">
+    <div class="neumorphic w-11/12 md:w-2/3 lg:w-1/2 text-center">
+        <h1 class="text-2xl font-bold mb-4">Email Priority Dashboard</h1>
+        <button onclick="toggleBusy()" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Toggle Busy Mode</button>
+        <p class="mt-2">Status: <span id="busy-status" class="font-semibold">{{ 'Busy' if busy else 'Available' }}</span></p>
+        <table class="w-full mt-4 border-collapse text-left">
+            <tr class="bg-gray-100">
+                <th class="p-2">Sender</th>
+                <th class="p-2">Subject</th>
+                <th class="p-2">Priority</th>
+            </tr>
+            {% for email in emails %}
+            <tr class="border-b">
+                <td class="p-2">{{ email.sender }}</td>
+                <td class="p-2">{{ email.subject }}</td>
+                <td class="p-2 font-bold {% if email.priority == 'High' %} text-red-500 {% elif email.priority == 'Medium' %} text-yellow-500 {% else %} text-green-500 {% endif %}">
+                    {{ email.priority }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
