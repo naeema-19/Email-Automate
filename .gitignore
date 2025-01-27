@@ -1,0 +1,13 @@
+# Ignore credentials and token files
+credentials.json
+token.json
+replied_emails.json
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore environment files
+.env
+venv/
