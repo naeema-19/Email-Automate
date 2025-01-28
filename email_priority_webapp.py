@@ -25,7 +25,7 @@ app = Flask(__name__)
 SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
 EXCLUDE_LABELS = ["CATEGORY_PROMOTIONS", "CATEGORY_SOCIAL"]
 REPLIED_EMAILS_FILE = "replied_emails.json"
-BUSY_STATUS = True  # Default: Not busy
+BUSY_STATUS = False  # Default: Not busy
 
 def get_credentials():
     creds = None
