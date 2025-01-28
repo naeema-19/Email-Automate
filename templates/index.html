@@ -35,32 +35,51 @@
             overflow: hidden;
             white-space: normal;
         }
+        .hover-effect:hover {
+            background-color: #2563eb;
+            transform: scale(1.05);
+            transition: all 0.3s ease-in-out;
+        }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen">
     <div class="neumorphic w-11/12 md:w-2/3 lg:w-3/4 text-center">
         <h1 class="text-2xl font-bold mb-4">Email Priority Dashboard</h1>
-        <button onclick="toggleBusy()" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Toggle Busy Mode</button>
+        <button onclick="toggleBusy()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover-effect">Toggle Busy Mode</button>
         <p class="mt-2">Status: <span id="busy-status" class="font-semibold">{{ 'Busy' if busy else 'Available' }}</span></p>
         
-        <table class="w-full mt-4 border-collapse text-left">
-            <tr class="bg-gray-100">
-                <th class="p-2">Sender</th>
-                <th class="p-2">Subject</th>
-                <th class="p-2">Priority</th>
-                <th class="p-2">Summary</th>
-            </tr>
+        <div class="hidden md:block">
+            <table class="w-full mt-4 border-collapse text-left">
+                <tr class="bg-gray-100">
+                    <th class="p-2">Sender</th>
+                    <th class="p-2">Subject</th>
+                    <th class="p-2">Priority</th>
+                    <th class="p-2">Summary</th>
+                </tr>
+                {% for email in emails %}
+                <tr class="border-b">
+                    <td class="p-2">{{ email.sender }}</td>
+                    <td class="p-2">{{ email.subject }}</td>
+                    <td class="p-2 font-bold {% if email.priority == 'High' %} text-red-500 {% elif email.priority == 'Medium' %} text-yellow-500 {% else %} text-green-500 {% endif %}">
+                        {{ email.priority }}
+                    </td>
+                    <td class="p-2 preview-text">{{ email.preview }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        
+        <!-- Mobile Card Layout -->
+        <div class="md:hidden mt-4">
             {% for email in emails %}
-            <tr class="border-b">
-                <td class="p-2">{{ email.sender }}</td>
-                <td class="p-2">{{ email.subject }}</td>
-                <td class="p-2 font-bold {% if email.priority == 'High' %} text-red-500 {% elif email.priority == 'Medium' %} text-yellow-500 {% else %} text-green-500 {% endif %}">
-                    {{ email.priority }}
-                </td>
-                <td class="p-2 preview-text">{{ email.preview }}</td>
-            </tr>
+            <div class="p-4 mb-4 bg-white rounded-lg shadow">
+                <p class="text-sm font-bold">Sender: <span class="font-normal">{{ email.sender }}</span></p>
+                <p class="text-sm font-bold">Subject: <span class="font-normal">{{ email.subject }}</span></p>
+                <p class="text-sm font-bold">Priority: <span class="font-bold {% if email.priority == 'High' %} text-red-500 {% elif email.priority == 'Medium' %} text-yellow-500 {% else %} text-green-500 {% endif %}">{{ email.priority }}</span></p>
+                <p class="text-sm font-bold">Summary: <span class="font-normal preview-text">{{ email.preview }}</span></p>
+            </div>
             {% endfor %}
-        </table>
+        </div>
     </div>
 </body>
 </html>
